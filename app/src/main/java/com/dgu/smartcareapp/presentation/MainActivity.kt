@@ -1,4 +1,4 @@
-package com.dgu.smartcareapp
+package com.dgu.smartcareapp.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
