@@ -6,6 +6,6 @@ import androidx.room.PrimaryKey
 @Entity
 data class DummyData (
     @PrimaryKey(autoGenerate = true)
-    val id: String,
+    val id: Int? = null,
     val content: String
 )
