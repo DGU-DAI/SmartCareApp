@@ -79,4 +79,7 @@ dependencies {
 
     // hilt
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+
+    // material
+    implementation("androidx.compose.material:material:1.6.7")
 }
