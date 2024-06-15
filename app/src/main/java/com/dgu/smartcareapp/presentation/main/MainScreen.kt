@@ -29,7 +29,10 @@ fun MainScreen(
                     navController = navigator.navController,
                     startDestination = navigator.startDestination,
                 ) {
-                    myNavGraph(Modifier.padding(paddingValue))
+                    myNavGraph(
+                        modifier = Modifier.padding(paddingValue),
+                        navController = navigator.navController
+                    )
                 }
             }
         },
