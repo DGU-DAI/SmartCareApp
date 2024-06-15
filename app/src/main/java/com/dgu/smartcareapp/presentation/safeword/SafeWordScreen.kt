@@ -21,12 +21,15 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.dgu.smartcareapp.R
+import com.dgu.smartcareapp.component.CustomAlertDialog
 import com.dgu.smartcareapp.ui.theme.black
 import com.dgu.smartcareapp.ui.theme.mainOrange
 import com.dgu.smartcareapp.ui.theme.semiBold16
@@ -42,7 +45,6 @@ fun SafeWordScreen(
         SafeWordAppBar(onRequestBack = onRequestBack, modifier = modifier)
         SafeWordList(safeWordList = listOf("AI 챗봇", "adfadf", "dfafadf", "adfadf"))
     }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -83,6 +85,7 @@ fun SafeWordAppBar(onRequestBack: () -> Unit, modifier: Modifier) {
 
 @Composable
 fun SafeWordList(safeWordList: List<String>) {
+    val showDialog = remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -115,7 +118,7 @@ fun SafeWordList(safeWordList: List<String>) {
 
         }
         FloatingActionButton(
-            onClick = { },
+            onClick = { showDialog.value = true },
             containerColor = mainOrange,
             contentColor = Color.White,
             shape = androidx.compose.foundation.shape.CircleShape,
@@ -124,6 +127,20 @@ fun SafeWordList(safeWordList: List<String>) {
             Icon(
                 imageVector = Icons.Default.Add,
                 contentDescription = "추가"
+            )
+        }
+
+        if (showDialog.value) {
+            CustomAlertDialog(
+                showDialog = showDialog,
+                title = "새로운 세이프 워드 추가하기",
+                hint = "ex) 도와줘",
+                leftButtonText = "",
+                rightButtonText = "저장하기",
+                showTextField = true,
+                textFieldValue = "",
+                onLeftButtonClick = {},
+                onRightButtonClick = {},
             )
         }
     }

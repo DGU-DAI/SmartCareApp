@@ -44,7 +44,6 @@ fun CustomAlertDialog(
     rightButtonText: String,
     showTextField: Boolean = true,
     textFieldValue: String = "",
-    onTextFieldValueChange: (String) -> Unit = {},
     onLeftButtonClick: () -> Unit,
     onRightButtonClick: () -> Unit,
 ) {
@@ -72,10 +71,7 @@ fun CustomAlertDialog(
                     if (showTextField) {
                         TextField(
                             value = inputText,
-                            onValueChange = {
-                                inputText = it
-                                onTextFieldValueChange(it)
-                            },
+                            onValueChange = { inputText = it },
                             placeholder = {
                                 Text(
                                     text = hint,
@@ -90,7 +86,9 @@ fun CustomAlertDialog(
                                 focusedIndicatorColor = mainOrange,
                                 unfocusedIndicatorColor = mainGrey,
                                 cursorColor = mainOrange
-                            )
+                            ),
+                            maxLines = 1,
+                            singleLine = true,
                         )
                     } else {
                         Spacer(modifier = Modifier.height(10.dp))
@@ -136,7 +134,6 @@ fun CustomAlertDialogPreview() {
         rightButtonText = "저장하기",
         showTextField = true,
         textFieldValue = "",
-        onTextFieldValueChange = {},
         onLeftButtonClick = {},
         onRightButtonClick = {},
     )
