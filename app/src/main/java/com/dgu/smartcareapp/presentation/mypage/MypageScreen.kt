@@ -1,8 +1,8 @@
 package com.dgu.smartcareapp.presentation.mypage
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -72,36 +72,37 @@ fun MyScreen(
 
 }
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyPageAppBar(onRequestBack: () -> Unit, modifier: Modifier) {
     Column {
-        TopAppBar(
-            {
-                Row(
-                    modifier.fillMaxSize(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Text(text = "마이페이지", style = semiBold16(), color = black)
-                }
-            },
-            navigationIcon = {
-                IconButton(onClick = {
-                    onRequestBack()
-                }) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_back),
-                        contentDescription = "뒤로가기"
-                    )
-                }
-            },
-            colors = TopAppBarDefaults.smallTopAppBarColors(
-                containerColor = Color.White
+        Box(
+            modifier = modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
+            TopAppBar(
+                navigationIcon = {
+                    IconButton(onClick = { onRequestBack() }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_back),
+                            contentDescription = "뒤로가기"
+                        )
+                    }
+                },
+                title = {},
+                colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.White)
             )
-
-        )
+            Row(
+                modifier = modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                Text(
+                    text = "마이페이지",
+                    style = semiBold16(),
+                    color = Color.Black,
+                )
+            }
+        }
         Divider(thickness = 2.dp)
     }
 }
@@ -132,7 +133,7 @@ fun SettingSwitchItem(title: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 31.dp, bottom = 19.dp)
+            .padding(vertical = 19.dp)
             .padding(start = 11.dp),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
