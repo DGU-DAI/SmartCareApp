@@ -151,8 +151,11 @@ fun SafeWordList(
                 onTextFieldValueChange = { newSafeWord.value = it },
                 onLeftButtonClick = {},
                 onRightButtonClick = {
-                    safeWordViewModel.insertSafeWord(newSafeWord.value)
-                    showDialog.value = false
+                    if (newSafeWord.value.isEmpty()) return@CustomAlertDialog
+                    else {
+                        safeWordViewModel.insertSafeWord(newSafeWord.value)
+                        showDialog.value = false
+                    }
                 },
             )
         }
