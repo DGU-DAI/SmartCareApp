@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import com.dgu.smartcareapp.presentation.mypage.navigation.myNavGraph
+import com.dgu.smartcareapp.presentation.safeword.navigation.safeWordNavGraph
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -31,7 +32,13 @@ fun MainScreen(
                 ) {
                     myNavGraph(
                         modifier = Modifier.padding(paddingValue),
-                        navController = navigator.navController
+                        onSafeWordClick = { navigator.navigateSafeWord() },
+                        onGuardianInfoClick = {},
+                        onRequestBack = { navigator.navController.popBackStack() }
+                    )
+                    safeWordNavGraph(
+                        modifier = Modifier.padding(paddingValue),
+                        onRequestBack = { navigator.navController.popBackStack() }
                     )
                 }
             }

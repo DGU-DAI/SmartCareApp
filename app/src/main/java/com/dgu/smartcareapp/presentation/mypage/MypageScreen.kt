@@ -63,13 +63,18 @@ fun MyScreen(
             .distinctUntilChanged()
             .collect { sideEffect ->
                 when (sideEffect) {
-                    MySideEffect.NavigateToSafeWordManage -> onSafeWordClick()
+                    MySideEffect.NavigateToSafeWordManage -> {
+                        onSafeWordClick()
+                        myPageViewModel.clearSideEffect()
+                    }
 
-                    MySideEffect.NavigateToGuardianInfoManage -> onGuardianInfoClick()
+                    MySideEffect.NavigateToGuardianInfoManage -> {
+                        onGuardianInfoClick()
+                        myPageViewModel.clearSideEffect()
+                    }
                 }
             }
     }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

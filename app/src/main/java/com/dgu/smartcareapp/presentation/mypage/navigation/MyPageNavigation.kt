@@ -12,14 +12,16 @@ fun NavController.navigateMy() {
 
 fun NavGraphBuilder.myNavGraph(
     modifier: Modifier,
-    navController: NavController,
+    onRequestBack: () -> Unit,
+    onSafeWordClick: () -> Unit,
+    onGuardianInfoClick: () -> Unit,
 ) {
     composable(route = MyRoute.ROUTE) {
         MyScreen(
             modifier = modifier,
-            onRequestBack = { navController.popBackStack() },
-            onSafeWordClick = {},
-            onGuardianInfoClick = {}
+            onRequestBack = onRequestBack,
+            onSafeWordClick = onSafeWordClick,
+            onGuardianInfoClick = onGuardianInfoClick
         )
     }
 }
