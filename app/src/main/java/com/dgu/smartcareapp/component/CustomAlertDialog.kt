@@ -39,6 +39,7 @@ import com.dgu.smartcareapp.ui.theme.semiBold16
 fun CustomAlertDialog(
     showDialog: MutableState<Boolean>,
     title: String,
+    hint: String,
     leftButtonText: String,
     rightButtonText: String,
     showTextField: Boolean = true,
@@ -77,7 +78,7 @@ fun CustomAlertDialog(
                             },
                             placeholder = {
                                 Text(
-                                    text = "ex) 도와줘",
+                                    text = hint,
                                     style = semiBold16(),
                                     color = mainGrey
                                 )
@@ -130,6 +131,7 @@ fun CustomAlertDialogPreview() {
     CustomAlertDialog(
         showDialog = showDialog,
         title = "새로운 세이프 워드 추가하기",
+        hint = "ex) 도와줘",
         leftButtonText = "취소",
         rightButtonText = "저장하기",
         showTextField = true,
