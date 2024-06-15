@@ -21,6 +21,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -28,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.dgu.smartcareapp.R
 import com.dgu.smartcareapp.component.CustomAlertDialog
 import com.dgu.smartcareapp.ui.theme.black
@@ -40,10 +43,12 @@ import com.dgu.smartcareapp.ui.theme.semiBold20
 fun SafeWordScreen(
     modifier: Modifier = Modifier,
     onRequestBack: () -> Unit,
+    safeWordViewModel: SafeWordViewModel = hiltViewModel()
 ) {
+    val safeWords by safeWordViewModel.safeWords.collectAsState()
     Column {
         SafeWordAppBar(onRequestBack = onRequestBack, modifier = modifier)
-        SafeWordList(safeWordList = listOf("AI 챗봇", "adfadf", "dfafadf", "adfadf"))
+        SafeWordList(safeWordList = safeWords)
     }
 }
 
@@ -84,13 +89,17 @@ fun SafeWordAppBar(onRequestBack: () -> Unit, modifier: Modifier) {
 
 
 @Composable
-fun SafeWordList(safeWordList: List<String>) {
+fun SafeWordList(
+    safeWordList: List<String>,
+    safeWordViewModel: SafeWordViewModel = hiltViewModel()
+) {
+    val newSafeWord = remember { mutableStateOf("") }
     val showDialog = remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(top = 42.dp)
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 15.dp)
     ) {
         Text(text = "세이프 워드 리스트", style = semiBold20(), color = black)
         Spacer(modifier = Modifier.height(7.dp))
@@ -138,9 +147,13 @@ fun SafeWordList(safeWordList: List<String>) {
                 leftButtonText = "",
                 rightButtonText = "저장하기",
                 showTextField = true,
-                textFieldValue = "",
+                textFieldValue = newSafeWord.value,
+                onTextFieldValueChange = { newSafeWord.value = it },
                 onLeftButtonClick = {},
-                onRightButtonClick = {},
+                onRightButtonClick = {
+                    safeWordViewModel.insertSafeWord(newSafeWord.value)
+                    showDialog.value = false
+                },
             )
         }
     }

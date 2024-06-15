@@ -18,10 +18,8 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,12 +41,12 @@ fun CustomAlertDialog(
     leftButtonText: String,
     rightButtonText: String,
     showTextField: Boolean = true,
-    textFieldValue: String = "",
+    textFieldValue: String,
+    onTextFieldValueChange: (String) -> Unit,
     onLeftButtonClick: () -> Unit,
     onRightButtonClick: () -> Unit,
 ) {
     if (showDialog.value) {
-        var inputText by remember { mutableStateOf(textFieldValue) }
         Dialog(onDismissRequest = { showDialog.value = false }) {
             Surface(
                 modifier = Modifier
@@ -70,8 +68,8 @@ fun CustomAlertDialog(
                     )
                     if (showTextField) {
                         TextField(
-                            value = inputText,
-                            onValueChange = { inputText = it },
+                            value = textFieldValue,
+                            onValueChange = onTextFieldValueChange,
                             placeholder = {
                                 Text(
                                     text = hint,
@@ -82,10 +80,10 @@ fun CustomAlertDialog(
                             textStyle = semiBold16(),
                             colors = TextFieldDefaults.textFieldColors(
                                 textColor = black,
+                                cursorColor = mainOrange,
                                 containerColor = Color.Transparent,
                                 focusedIndicatorColor = mainOrange,
                                 unfocusedIndicatorColor = mainGrey,
-                                cursorColor = mainOrange
                             ),
                             maxLines = 1,
                             singleLine = true,
@@ -125,6 +123,7 @@ fun CustomAlertDialog(
 @Preview
 @Composable
 fun CustomAlertDialogPreview() {
+    val newSafeWord = remember { mutableStateOf("") }
     val showDialog = remember { mutableStateOf(true) }
     CustomAlertDialog(
         showDialog = showDialog,
@@ -134,6 +133,7 @@ fun CustomAlertDialogPreview() {
         rightButtonText = "저장하기",
         showTextField = true,
         textFieldValue = "",
+        onTextFieldValueChange = { newSafeWord.value = it },
         onLeftButtonClick = {},
         onRightButtonClick = {},
     )

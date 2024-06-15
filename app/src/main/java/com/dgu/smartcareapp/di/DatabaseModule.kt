@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.dgu.smartcareapp.data.localdatasource.DummyDao
 import com.dgu.smartcareapp.data.localdatasource.DummyDatabase
+import com.dgu.smartcareapp.data.localdatasource.SafeWordDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,11 +23,20 @@ object DatabaseModule {
             context,
             DummyDatabase::class.java,
             "dummy_database"
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides
+    @Singleton
     fun provideDummyDao(dummyDatabase: DummyDatabase): DummyDao {
         return dummyDatabase.dummyDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideSafeWordDao(dummyDatabase: DummyDatabase): SafeWordDao {
+        return dummyDatabase.safeWordDao()
     }
 }
