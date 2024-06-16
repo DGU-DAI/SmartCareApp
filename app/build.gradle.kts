@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -51,7 +52,7 @@ android {
 }
 
 dependencies {
-
+    val hiltVersion = "2.51"
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.activity:activity-compose:1.9.0")
@@ -78,5 +79,10 @@ dependencies {
     implementation("androidx.room:room-ktx:2.6.1")
 
     // hilt
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    kapt("com.google.dagger:hilt-compiler:$hiltVersion")
+    implementation("com.google.dagger:hilt-android:$hiltVersion")
+
+    // material
+    implementation("androidx.compose.material:material:1.6.7")
 }

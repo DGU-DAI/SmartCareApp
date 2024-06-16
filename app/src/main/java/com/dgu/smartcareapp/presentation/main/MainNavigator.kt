@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.dgu.smartcareapp.presentation.mypage.navigation.MyRoute
 import com.dgu.smartcareapp.presentation.mypage.navigation.navigateMy
+import com.dgu.smartcareapp.presentation.safeword.navigation.navigateSafeWord
 
 class MainNavigator(
     val navController: NavHostController,
@@ -15,6 +16,10 @@ class MainNavigator(
     val startDestination = MyRoute.ROUTE
     fun navigateMyPage() {
         navController.navigateMy()
+    }
+
+    fun navigateSafeWord() {
+        navController.navigateSafeWord()
     }
 }
 
