@@ -79,7 +79,7 @@ fun GuardianAppBar(onRequestBack: () -> Unit, modifier: Modifier) {
                     }
                 },
                 title = {},
-                colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.White)
+                colors = TopAppBarDefaults.topAppBarColors(Color.White)
             )
             Row(
                 modifier = modifier.fillMaxWidth(),
