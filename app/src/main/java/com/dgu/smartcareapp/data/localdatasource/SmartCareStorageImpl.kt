@@ -35,8 +35,8 @@ class SmartCareStorageImpl @Inject constructor(@ApplicationContext context: Cont
         set(value) = pref.edit { putString(PHONE_NUMBER, value) }
         get() = pref.getString(
             PHONE_NUMBER,
-            "",
-        ) ?: ""
+            "01091631442",
+        ) ?: "01091631442"
 
     companion object {
         private const val FILE_NAME = "SCDataStore"

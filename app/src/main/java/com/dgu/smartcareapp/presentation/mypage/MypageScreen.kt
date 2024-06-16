@@ -1,5 +1,7 @@
 package com.dgu.smartcareapp.presentation.mypage
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,6 +11,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -28,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -52,6 +57,7 @@ fun MyScreen(
     val lifecycleOwner = LocalLifecycleOwner.current
     Column {
         MyPageAppBar(onRequestBack = onRequestBack, modifier = modifier)
+        GuardianInfoPage()
         SettingsScreen()
     }
 
@@ -192,3 +198,50 @@ fun SettingNavigationItem(
 }
 
 
+@Composable
+fun GuardianInfoPage() {
+    val context = LocalContext.current
+    var showPermissionDialog by remember { mutableStateOf(false) }
+    val permissionsLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        when {
+            permissions.values.all { it } -> {
+                // 권한이 모두 승인되었을 때의 로직
+            }
+
+            else -> {
+                // 권한 거부에 대한 처리
+                showPermissionDialog = true
+            }
+        }
+    }
+
+    Column {
+        Button(onClick = {
+            permissionsLauncher.launch(
+                arrayOf(
+                    android.Manifest.permission.SEND_SMS,
+                    android.Manifest.permission.RECEIVE_SMS,
+                    android.Manifest.permission.READ_SMS,
+                    android.Manifest.permission.RECORD_AUDIO
+                )
+            )
+        }) {
+            Text("보호자 정보 수정")
+        }
+
+        if (showPermissionDialog) {
+            AlertDialog(
+                onDismissRequest = { showPermissionDialog = false },
+                confirmButton = {
+                    Button(onClick = { showPermissionDialog = false }) {
+                        Text("확인")
+                    }
+                },
+                title = { Text("권한 요청 필요") },
+                text = { Text("보호자에게 경고 메시지를 보내기 위해 SMS 및 음성 녹음 권한이 필요합니다.") }
+            )
+        }
+    }
+}

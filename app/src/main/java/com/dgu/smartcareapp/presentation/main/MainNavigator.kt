@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.dgu.smartcareapp.presentation.guardian.navigation.navigateGuardian
 import com.dgu.smartcareapp.presentation.mypage.navigation.MyRoute
 import com.dgu.smartcareapp.presentation.mypage.navigation.navigateMy
 import com.dgu.smartcareapp.presentation.safeword.navigation.navigateSafeWord
@@ -20,6 +21,10 @@ class MainNavigator(
 
     fun navigateSafeWord() {
         navController.navigateSafeWord()
+    }
+
+    fun navigateGuardian() {
+        navController.navigateGuardian()
     }
 }
 

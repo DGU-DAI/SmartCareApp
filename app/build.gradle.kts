@@ -40,6 +40,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
@@ -52,6 +53,7 @@ android {
 }
 
 dependencies {
+    implementation("androidx.security:security-crypto-ktx:1.0.0")
     val hiltVersion = "2.51"
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
@@ -85,4 +87,7 @@ dependencies {
 
     // material
     implementation("androidx.compose.material:material:1.6.7")
+
+    // Security
+    implementation("androidx.security:security-crypto-ktx:1.1.0-alpha06")
 }
