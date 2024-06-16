@@ -14,8 +14,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Switch
@@ -33,7 +33,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -102,7 +101,7 @@ fun MyPageAppBar(onRequestBack: () -> Unit, modifier: Modifier) {
                     }
                 },
                 title = {},
-                colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.White)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
             )
             Row(
                 modifier = modifier.fillMaxWidth(),
@@ -115,7 +114,7 @@ fun MyPageAppBar(onRequestBack: () -> Unit, modifier: Modifier) {
                 )
             }
         }
-        Divider(thickness = 2.dp)
+        HorizontalDivider(thickness = 2.dp)
     }
 }
 
@@ -127,15 +126,15 @@ fun SettingsScreen() {
             .padding(horizontal = 16.dp)
     ) {
         SettingSwitchItem(title = "세이프 워드 기능")
-        Divider()
+        HorizontalDivider()
         SettingNavigationItem(
             title = "세이프 워드 설정",
         )
-        Divider()
+        HorizontalDivider()
         SettingNavigationItem(
             title = "보호자 정보 수정",
         )
-        Divider()
+        HorizontalDivider()
     }
 }
 
@@ -206,7 +205,6 @@ fun SettingNavigationItem(
 
 @Composable
 fun Permission() {
-    val context = LocalContext.current
     var showPermissionDialog by remember { mutableStateOf(false) }
     val permissionsLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions()
