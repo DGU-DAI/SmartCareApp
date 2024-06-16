@@ -78,12 +78,14 @@ fun CustomAlertDialog(
                                 )
                             },
                             textStyle = semiBold16(),
-                            colors = TextFieldDefaults.textFieldColors(
-                                textColor = black,
+                            colors = TextFieldDefaults.colors(
+                                focusedTextColor = black,
+                                unfocusedTextColor = black,
                                 cursorColor = mainOrange,
-                                containerColor = Color.Transparent,
+                                focusedContainerColor = Color.Transparent,
+                                unfocusedContainerColor = Color.Transparent,
                                 focusedIndicatorColor = mainOrange,
-                                unfocusedIndicatorColor = mainGrey,
+                                unfocusedIndicatorColor = mainGrey
                             ),
                             maxLines = 1,
                             singleLine = true,

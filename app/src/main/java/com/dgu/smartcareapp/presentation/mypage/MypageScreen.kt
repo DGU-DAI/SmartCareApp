@@ -1,5 +1,6 @@
 package com.dgu.smartcareapp.presentation.mypage
 
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
@@ -57,7 +58,7 @@ fun MyScreen(
     val lifecycleOwner = LocalLifecycleOwner.current
     Column {
         MyPageAppBar(onRequestBack = onRequestBack, modifier = modifier)
-        GuardianInfoPage()
+        Permission()
         SettingsScreen()
     }
 
@@ -139,8 +140,8 @@ fun SettingsScreen() {
 }
 
 @Composable
-fun SettingSwitchItem(title: String) {
-    var isChecked by remember { mutableStateOf(false) }
+fun SettingSwitchItem(title: String, myPageViewModel: MyViewModel = hiltViewModel()) {
+    var isChecked by remember { mutableStateOf(myPageViewModel.isChecked.value) }
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -154,7 +155,12 @@ fun SettingSwitchItem(title: String) {
         Switch(
             modifier = Modifier.scale(0.8f),
             checked = isChecked,
-            onCheckedChange = { isChecked = it },
+            onCheckedChange = {
+                isChecked = it
+                myPageViewModel.setIsChecked(it)
+                myPageViewModel.getIsChecked()
+                Log.d("aaa", "${myPageViewModel.isChecked.value}")
+            },
             colors = SwitchDefaults.colors(
                 checkedThumbColor = mainOrange,
                 uncheckedThumbColor = Color.Black,
@@ -199,7 +205,7 @@ fun SettingNavigationItem(
 
 
 @Composable
-fun GuardianInfoPage() {
+fun Permission() {
     val context = LocalContext.current
     var showPermissionDialog by remember { mutableStateOf(false) }
     val permissionsLauncher = rememberLauncherForActivityResult(
@@ -228,7 +234,7 @@ fun GuardianInfoPage() {
                 )
             )
         }) {
-            Text("보호자 정보 수정")
+            Text("권한 허용")
         }
 
         if (showPermissionDialog) {

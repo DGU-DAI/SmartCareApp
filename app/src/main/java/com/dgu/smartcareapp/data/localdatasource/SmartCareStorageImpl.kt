@@ -7,6 +7,8 @@ import androidx.security.crypto.MasterKey
 import com.dgu.smartcareapp.BuildConfig
 import com.dgu.smartcareapp.domain.entity.SmartCareStorage
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -38,8 +40,20 @@ class SmartCareStorageImpl @Inject constructor(@ApplicationContext context: Cont
             "01091631442",
         ) ?: "01091631442"
 
+    override var isChecked: Boolean
+        set(value) {
+            pref.edit { putBoolean(IS_CHECK, value) }
+            _isCheckedFlow.value = value
+        }
+        get() = pref.getBoolean(IS_CHECK, false)
+
+    private val _isCheckedFlow = MutableStateFlow(pref.getBoolean(IS_CHECK, false))
+    override val isCheckedFlow: Flow<Boolean> get() = _isCheckedFlow
+
+
     companion object {
         private const val FILE_NAME = "SCDataStore"
         private const val PHONE_NUMBER = "phone_number"
+        private const val IS_CHECK = "is_check"
     }
 }

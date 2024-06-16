@@ -38,6 +38,7 @@ import com.dgu.smartcareapp.R
 import com.dgu.smartcareapp.ext.addFocusCleaner
 import com.dgu.smartcareapp.ui.theme.black
 import com.dgu.smartcareapp.ui.theme.mainGrey
+import com.dgu.smartcareapp.ui.theme.mainOrange
 import com.dgu.smartcareapp.ui.theme.semiBold16
 import com.dgu.smartcareapp.ui.theme.semiBold24
 
@@ -124,12 +125,14 @@ fun GuardianInfo(
             value = phoneNumber,
             onValueChange = { phoneNumber = it },
             textStyle = semiBold16(),
-            colors = TextFieldDefaults.textFieldColors(
-                textColor = black,
+            colors = TextFieldDefaults.colors(
+                focusedTextColor = black,
+                unfocusedTextColor = black,
                 cursorColor = black,
-                containerColor = Color.Transparent,
-                focusedIndicatorColor = black,
-                unfocusedIndicatorColor = mainGrey,
+                focusedContainerColor = Color.Transparent,
+                unfocusedContainerColor = Color.Transparent,
+                focusedIndicatorColor = mainOrange,
+                unfocusedIndicatorColor = mainGrey
             ),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             maxLines = 1,
