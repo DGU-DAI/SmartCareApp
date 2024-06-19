@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyViewModel @Inject constructor(
-    private val smartCareStorage: SmartCareStorage
+    private val smartCareStorage: SmartCareStorage,
 ) : ViewModel() {
     private val _sideEffect = MutableSharedFlow<MySideEffect>(replay = 1, extraBufferCapacity = 1)
     val sideEffect: SharedFlow<MySideEffect>

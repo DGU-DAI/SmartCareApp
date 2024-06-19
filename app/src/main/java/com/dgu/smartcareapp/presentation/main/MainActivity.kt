@@ -1,6 +1,5 @@
 package com.dgu.smartcareapp.presentation.main
 
-import VoiceRecognitionManager
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -17,6 +16,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.dgu.smartcareapp.domain.entity.SmartCareStorage
 import com.dgu.smartcareapp.ui.theme.SmartCareAppTheme
+import com.dgu.smartcareapp.util.VoiceRecognitionManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
@@ -31,7 +31,9 @@ val LocalDeviceSizeComposition = staticCompositionLocalOf {
 class MainActivity : ComponentActivity() {
     @Inject
     lateinit var smartCareStorage: SmartCareStorage
-    private lateinit var voiceRecognitionManager: VoiceRecognitionManager
+
+    @Inject
+    lateinit var voiceRecognitionManager: VoiceRecognitionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,25 +65,36 @@ class MainActivity : ComponentActivity() {
 
         mainViewModel.isChecked.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
             .distinctUntilChanged()
-            .onEach { isChecked -> if (isChecked) initializeVoiceRecognition(mainViewModel) }
+            .onEach { isChecked ->
+                if (isChecked) initializeVoiceRecognition(mainViewModel)
+                else {
+                    voiceRecognitionManager.stopListening()
+                }
+            }
             .launchIn(lifecycleScope)
 
     }
 
     private fun initializeVoiceRecognition(mainViewModel: MainViewModel) {
-        Log.d("aaa", "온!")
+        Log.d("aaa", "initializeVoiceRecognition 호출됨")
         mainViewModel.safeWords.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
             .distinctUntilChanged()
             .onEach { safeWords ->
-                if (!::voiceRecognitionManager.isInitialized) {
-                    voiceRecognitionManager = VoiceRecognitionManager(this, safeWords)
-                }
-                voiceRecognitionManager.startListening()
-                voiceRecognitionManager.onSafeWordDetected = { safeWord ->
-                    mainViewModel.handleSafeWordDetected(safeWord, this@MainActivity)
+                Log.d("MainActivity", "Retrieved safe words: $safeWords")
+                if (safeWords.isNotEmpty()) {
+                    if (::voiceRecognitionManager.isInitialized) {
+                        voiceRecognitionManager.stopListening()
+                    }
+                    voiceRecognitionManager = VoiceRecognitionManager(this)
+                    voiceRecognitionManager.setSafeWords(safeWords)
+                    voiceRecognitionManager.startListening()
+                    voiceRecognitionManager.onSafeWordDetected = { safeWord ->
+                        mainViewModel.handleSafeWordDetected(safeWord, this@MainActivity)
+                    }
                 }
             }.launchIn(lifecycleScope)
     }
+
 
     override fun onDestroy() {
         if (::voiceRecognitionManager.isInitialized) {
