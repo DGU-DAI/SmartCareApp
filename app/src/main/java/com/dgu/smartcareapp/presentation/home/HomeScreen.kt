@@ -167,12 +167,11 @@ fun todoListLayout(
                 modifier = Modifier
                     .padding(end = 12.dp)
                     .align(Alignment.CenterVertically)
-//                    .size(40.dp)
 
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.icn_check),
-                    tint = mainGrey,
+                    tint = if (todoList[index].todoFinish)  mainOrange else mainGrey,
                     contentDescription = null,
                     modifier = Modifier.size(40.dp)
                 )

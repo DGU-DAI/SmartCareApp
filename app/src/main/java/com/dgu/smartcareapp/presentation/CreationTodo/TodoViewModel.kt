@@ -21,7 +21,8 @@ class TodoViewModel @Inject constructor(
         MutableStateFlow(
             listOf(
                 TodoList("할일1", 12, 0, false),
-                TodoList("할일2", 1, 0, false)
+                TodoList("할일2", 1, 0, true),
+                TodoList("할일3", 1, 0, false)
             )
         )
 
