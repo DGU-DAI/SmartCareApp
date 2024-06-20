@@ -29,7 +29,7 @@ class CreationTodoActivity : ComponentActivity() {
                         viewModel.confirmTodoTime(hour, minute)
                     },
                     onNavigationIconClick = {
-                        // todo 뒤로가기
+                        finish()
                     }
                 )
             }

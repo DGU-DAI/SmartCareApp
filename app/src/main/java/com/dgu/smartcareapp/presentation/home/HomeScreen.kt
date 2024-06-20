@@ -1,6 +1,7 @@
 package com.dgu.smartcareapp.presentation.home
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -32,12 +33,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.dgu.smartcareapp.R
 import com.dgu.smartcareapp.domain.entity.TodoList
+import com.dgu.smartcareapp.presentation.CreationTodo.CreationTodoActivity
 import com.dgu.smartcareapp.presentation.CreationTodo.TodoViewModel
 import com.dgu.smartcareapp.ui.theme.SmartCareAppTheme
 import com.dgu.smartcareapp.ui.theme.mainGrey
@@ -52,7 +55,6 @@ fun Home(
     modifier: Modifier = Modifier,
     onClickMyPage: () -> Unit,
     todoViewModel: TodoViewModel = hiltViewModel()
-//    onClickTodo: () -> Unit
 ) {
     val todoLists by todoViewModel.todoList.collectAsState()
 
@@ -70,9 +72,7 @@ fun Home(
             }
         },
         floatingActionButton = {
-            FloatingActionBtn {
-                //
-            }
+            FloatingActionBtn()
         }
     )
 }
@@ -93,7 +93,7 @@ fun TopBar(onClickMyPage: () -> Unit, modifier: Modifier) {
                     )
                 },
                 actions = {
-                    IconButton(onClick = { }) {
+                    IconButton(onClickMyPage) {
                         Icon(
                             imageVector = ImageVector.vectorResource(id = R.drawable.ic_mypage),
                             tint = mainGrey,
@@ -171,7 +171,7 @@ fun todoListLayout(
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.icn_check),
-                    tint = if (todoList[index].todoFinish)  mainOrange else mainGrey,
+                    tint = if (todoList[index].todoFinish) mainOrange else mainGrey,
                     contentDescription = null,
                     modifier = Modifier.size(40.dp)
                 )
@@ -181,20 +181,17 @@ fun todoListLayout(
 }
 
 @Composable
-fun FloatingActionBtn(onClick: () -> Unit) {
+fun FloatingActionBtn() {
+    val context = LocalContext.current
+
     ExtendedFloatingActionButton(
-        onClick = { onClick() },
+        onClick = {
+            val intent = Intent(context, CreationTodoActivity::class.java)
+            context.startActivity(intent)
+        },
         icon = {},
         text = { Text(text = "일정 추가") },
         containerColor = mainOrange,
         contentColor = Color.White,
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun HomePreview() {
-    SmartCareAppTheme {
-        Home(onClickMyPage = {})
-    }
 }
