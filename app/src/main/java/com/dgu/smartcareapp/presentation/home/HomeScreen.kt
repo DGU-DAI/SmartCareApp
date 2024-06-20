@@ -28,23 +28,23 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.dgu.smartcareapp.R
+import com.dgu.smartcareapp.component.CustomAlertDialog
 import com.dgu.smartcareapp.domain.entity.TodoList
 import com.dgu.smartcareapp.presentation.CreationTodo.CreationTodoActivity
 import com.dgu.smartcareapp.presentation.CreationTodo.TodoViewModel
-import com.dgu.smartcareapp.ui.theme.SmartCareAppTheme
 import com.dgu.smartcareapp.ui.theme.mainGrey
 import com.dgu.smartcareapp.ui.theme.mainOrange
 import com.dgu.smartcareapp.ui.theme.regular16
@@ -58,16 +58,9 @@ fun Home(
     onClickMyPage: () -> Unit,
     todoViewModel: TodoViewModel = hiltViewModel()
 ) {
+//    todoViewModel.delete()
 
     val todoLists by todoViewModel.todoList.collectAsState()
-//    var todoLists = listOf<TodoList>()
-//    LaunchedEffect(Unit) {
-//        todoViewModel.todoList.collect {
-//            Log.d("테스트", "[todoList] activity -> $it")
-//            todoLists = it
-//        }
-//    }
-    Log.d("테스트", "[todoList] activity -> $todoLists")
 
     Scaffold(
         topBar = {
@@ -143,8 +136,11 @@ fun TodoList(
 @Composable
 fun todoListLayout(
     todoList: List<TodoList>,
-    index: Int
+    index: Int,
+    todoViewModel: TodoViewModel = hiltViewModel()
 ) {
+    val showDialog = remember { mutableStateOf(false) }
+
     Card(
         Modifier
             .padding(vertical = 7.dp)
@@ -174,7 +170,11 @@ fun todoListLayout(
                 )
             }
             IconButton(
-                onClick = {},
+                onClick = {
+                    if (!todoList[index].todoFinish) {
+                        showDialog.value = true
+                    }
+                },
                 modifier = Modifier
                     .padding(end = 12.dp)
                     .align(Alignment.CenterVertically)
@@ -185,6 +185,27 @@ fun todoListLayout(
                     tint = if (todoList[index].todoFinish) mainOrange else mainGrey,
                     contentDescription = null,
                     modifier = Modifier.size(40.dp)
+                )
+            }
+
+            if (showDialog.value) {
+                CustomAlertDialog(
+                    showDialog = showDialog,
+                    title = "해당 일정을 완료하셨나요?",
+                    showTextField = false,
+                    hint = "",
+                    leftButtonText = "아니요",
+                    rightButtonText = "네",
+                    textFieldValue = "",
+                    onTextFieldValueChange = {},
+                    onLeftButtonClick = {
+                        showDialog.value = false
+                    },
+                    onRightButtonClick = {
+                        Log.d("테스트","[todoList] homeScreen -> id: ${todoList[index].id}")
+                        todoViewModel.updateTodoList(todoList[index].id, true)
+                        showDialog.value = false
+                    }
                 )
             }
         }

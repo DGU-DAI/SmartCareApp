@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.dgu.smartcareapp.domain.entity.TodoList
 import com.dgu.smartcareapp.domain.usecase.TodoListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,6 +36,18 @@ class TodoViewModel @Inject constructor(
     fun insertTodoList(todoList: TodoList) {
         viewModelScope.launch {
             todoListUseCase.insertTodoList(todoList)
+        }
+    }
+
+    fun updateTodoList(todoId: Int, todoFinish: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            todoListUseCase.updateTodoFinish(todoId, todoFinish)
+        }
+    }
+
+    fun delete() {
+        viewModelScope.launch {
+            todoListUseCase.delete()
         }
     }
 }

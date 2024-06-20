@@ -23,4 +23,12 @@ class TodoListUseCase @Inject constructor(
             )
         )
     }
+
+    suspend fun updateTodoFinish(todoId: Int, todoFinish: Boolean) {
+        todoListRepository.updateTodoFinish(todoId, todoFinish)
+    }
+
+    suspend fun delete() {
+        todoListRepository.delete()
+    }
 }

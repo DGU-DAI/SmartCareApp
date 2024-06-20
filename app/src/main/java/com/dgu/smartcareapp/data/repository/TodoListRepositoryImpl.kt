@@ -16,6 +16,7 @@ class TodoListRepositoryImpl @Inject constructor(
         todoListDao.getTodoList().map { todoList ->
             todoList.map {
                 TodoList(
+                    id = it.id,
                     todoTitle = it.todoTitle,
                     todoHour = it.todoHour,
                     todoMinute = it.todoMinute,
@@ -26,5 +27,13 @@ class TodoListRepositoryImpl @Inject constructor(
 
     override suspend fun insertTodoList(todoListItem: TodoListData) {
         todoListDao.insertTodoList(todoListItem)
+    }
+
+    override suspend fun updateTodoFinish(todoId: Int, todoFinish: Boolean) {
+        todoListDao.updateTodoFinish(todoId, todoFinish)
+    }
+
+    override suspend fun delete() {
+        todoListDao.deleteAllTodoList()
     }
 }
