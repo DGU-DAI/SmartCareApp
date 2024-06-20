@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
+import com.dgu.smartcareapp.presentation.home.homeNavGraph
 import com.dgu.smartcareapp.presentation.mypage.navigation.myNavGraph
 import com.dgu.smartcareapp.presentation.safeword.navigation.safeWordNavGraph
 
@@ -30,6 +31,10 @@ fun MainScreen(
                     navController = navigator.navController,
                     startDestination = navigator.startDestination,
                 ) {
+                    homeNavGraph(
+                        modifier = Modifier.padding(paddingValue),
+                        onClickMyPage = { navigator.navigateMyPage() }
+                    )
                     myNavGraph(
                         modifier = Modifier.padding(paddingValue),
                         onSafeWordClick = { navigator.navigateSafeWord() },

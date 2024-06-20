@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.dgu.smartcareapp.presentation.mypage.navigation.MyRoute
+import com.dgu.smartcareapp.presentation.home.Home
 import com.dgu.smartcareapp.presentation.mypage.navigation.navigateMy
 import com.dgu.smartcareapp.presentation.safeword.navigation.navigateSafeWord
 
@@ -13,7 +13,7 @@ class MainNavigator(
 ) {
 
     //추후 홈으로 변경
-    val startDestination = MyRoute.ROUTE
+    val startDestination = Home.Route
     fun navigateMyPage() {
         navController.navigateMy()
     }
