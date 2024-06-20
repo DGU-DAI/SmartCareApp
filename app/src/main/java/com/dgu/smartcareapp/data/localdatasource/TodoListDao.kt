@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface TodoListDao {
 
-    @Query("SELECT * FROM todo_list")
+    @Query("SELECT * FROM todolist")
     fun getTodoList(): Flow<List<TodoListData>>
 
     @Insert

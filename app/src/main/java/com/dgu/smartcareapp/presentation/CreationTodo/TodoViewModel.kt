@@ -14,26 +14,17 @@ import javax.inject.Inject
 @HiltViewModel
 class TodoViewModel @Inject constructor(
     private val todoListUseCase: TodoListUseCase
-): ViewModel() {
+) : ViewModel() {
 
-//    private val _todoList = MutableStateFlow<List<TodoList>>(emptyList())
-    private val _todoList: MutableStateFlow<List<TodoList>> =
-        MutableStateFlow(
-            listOf(
-                TodoList("할일1", 12, 0, false),
-                TodoList("할일2", 1, 0, true),
-                TodoList("할일3", 1, 0, false)
-            )
-        )
-
+    private val _todoList = MutableStateFlow<List<TodoList>>(emptyList())
     val todoList: StateFlow<List<TodoList>>
         get() = _todoList.asStateFlow()
 
     init {
-//        getTodoList()
+        getTodoList()
     }
 
-    private fun getTodoList() {
+    fun getTodoList() {
         viewModelScope.launch {
             todoListUseCase.getTodoList().collect { todoList ->
                 _todoList.value = todoList

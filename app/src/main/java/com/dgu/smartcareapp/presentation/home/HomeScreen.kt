@@ -2,6 +2,7 @@ package com.dgu.smartcareapp.presentation.home
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +28,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -56,7 +58,16 @@ fun Home(
     onClickMyPage: () -> Unit,
     todoViewModel: TodoViewModel = hiltViewModel()
 ) {
+
     val todoLists by todoViewModel.todoList.collectAsState()
+//    var todoLists = listOf<TodoList>()
+//    LaunchedEffect(Unit) {
+//        todoViewModel.todoList.collect {
+//            Log.d("테스트", "[todoList] activity -> $it")
+//            todoLists = it
+//        }
+//    }
+    Log.d("테스트", "[todoList] activity -> $todoLists")
 
     Scaffold(
         topBar = {
