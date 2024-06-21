@@ -10,6 +10,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.compose.NavHost
 import com.dgu.smartcareapp.presentation.CreationTodo.todoNavGraph
 import com.dgu.smartcareapp.presentation.home.homeNavGraph
@@ -21,6 +22,7 @@ import com.dgu.smartcareapp.presentation.safeword.navigation.safeWordNavGraph
 fun MainScreen(
     navigator: MainNavigator = rememberMainNavigator(),
     context: Context,
+    lifeCycleScope: LifecycleCoroutineScope
 ) {
 
     Scaffold(
@@ -45,6 +47,7 @@ fun MainScreen(
                             navigator.navController.popBackStack()
                         },
                         context = context,
+                        lifecycleScope = lifeCycleScope,
                         onNavigationIconClick = { navigator.navController.popBackStack() }
                     )
                     myNavGraph(

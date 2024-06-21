@@ -29,57 +29,57 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class CreationTodoActivity : ComponentActivity() {
-    val viewModel: CreationViewModel by viewModels()
-    val todoViewModel: TodoViewModel by viewModels()
-    lateinit var alarmUtils: AlarmUtils
-    lateinit var alarmReceiver: AlarmReceiver
+//    val viewModel: CreationViewModel by viewModels()
+//    val todoViewModel: TodoViewModel by viewModels()
+//    lateinit var alarmUtils: AlarmUtils
+//    lateinit var alarmReceiver: AlarmReceiver
 
     // todo rememberSaveble로 수정
-    val isShow = mutableStateOf(false)
-    val toDoTitle: MutableState<String?> = mutableStateOf(null)
+//    val isShow = mutableStateOf(false)
+//    val toDoTitle: MutableState<String?> = mutableStateOf(null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        alarmUtils = AlarmUtils(this)
-        alarmReceiver = AlarmReceiver()
+//        alarmUtils = AlarmUtils(this)
+//        alarmReceiver = AlarmReceiver()
 
         setContent {
-            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+//            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             val lifecycleOwner = LocalLifecycleOwner.current
 
 
             // 이 부분 확인해보기
-            DisposableEffect(lifecycleOwner) {
-                val observer = LifecycleEventObserver { _, event ->
-                    if (event == Lifecycle.Event.ON_RESUME) {
-                        lifecycleScope.launch {
-                            // 가장 최근 알람을 받아 옴
-                            AlarmManager.alarm.collectLatest {
-                                Log.d("dana", "알람왔다!")
-                                isShow.value = true
-                                toDoTitle.value = it
-                            }
-                        }
-                    }
-                }
-                lifecycleOwner.lifecycle.addObserver(observer)
-                onDispose {
-                    lifecycleOwner.lifecycle.removeObserver(observer)
-                }
-            }
+//            DisposableEffect(lifecycleOwner) {
+//                val observer = LifecycleEventObserver { _, event ->
+//                    if (event == Lifecycle.Event.ON_RESUME) {
+//                        lifecycleScope.launch {
+//                            // 가장 최근 알람을 받아 옴
+//                            AlarmManager.alarm.collectLatest {
+//                                Log.d("dana", "알람왔다!")
+//                                isShow.value = true
+//                                toDoTitle.value = it
+//                            }
+//                        }
+//                    }
+//                }
+//                lifecycleOwner.lifecycle.addObserver(observer)
+//                onDispose {
+//                    lifecycleOwner.lifecycle.removeObserver(observer)
+//                }
+//            }
 
             SmartCareAppTheme {
                 Box(modifier = Modifier.fillMaxSize()) {
 
-                    if (isShow.value) {
-                        toDoTitle.value?.let {
-                            AlarmDialog(
-                                toDoTitle = it,
-                                onConfirm = { isShow.value = false }
-                            )
-                        }
-                    }
+//                    if (isShow.value) {
+//                        toDoTitle.value?.let {
+//                            AlarmDialog(
+//                                toDoTitle = it,
+//                                onConfirm = { isShow.value = false }
+//                            )
+//                        }
+//                    }
 
 //                    CreationTodoScreen(
 //                        onButtonClick = { time, toDoTitle ->

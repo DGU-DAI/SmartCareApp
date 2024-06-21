@@ -2,6 +2,7 @@ package com.dgu.smartcareapp.presentation.CreationTodo
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -21,6 +22,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
@@ -36,16 +38,26 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.dgu.smartcareapp.R
+import com.dgu.smartcareapp.alarm.AlarmManager
 import com.dgu.smartcareapp.alarm.AlarmReceiver
 import com.dgu.smartcareapp.alarm.AlarmUtils
+import com.dgu.smartcareapp.component.AlarmDialog
 import com.dgu.smartcareapp.domain.entity.TodoList
 import com.dgu.smartcareapp.ui.theme.SmartCareAppTheme
 import com.dgu.smartcareapp.ui.theme.mainGrey
 import com.dgu.smartcareapp.ui.theme.mainOrange
 import com.dgu.smartcareapp.ui.theme.regular14
 import com.dgu.smartcareapp.ui.theme.semiBold16
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
@@ -57,6 +69,7 @@ fun CreationTodoScreen(
 //    onButtonClick: (time: String, toDoTitle: String) -> Unit = { _, _ -> },
     onButtonClick: () -> Unit,
     context: Context,
+    lifecycleScope: LifecycleCoroutineScope,
     onNavigationIconClick: () -> Unit = {},
     viewModel: CreationViewModel = hiltViewModel(),
     todoViewModel: TodoViewModel = hiltViewModel()
@@ -64,16 +77,47 @@ fun CreationTodoScreen(
     lateinit var alarmUtils: AlarmUtils
     lateinit var alarmReceiver: AlarmReceiver
 
+    // todo rememberSaveble로 수정
     val isShow = mutableStateOf(false)
     val toDoTitle: MutableState<String?> = mutableStateOf(null)
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val lifecycleOwner = LocalLifecycleOwner.current
 
     val toDoTextEnabled by remember(key1 = uiState.toDoTitle) {
         derivedStateOf(uiState.toDoTitle::isNotEmpty)
     }
 
     val isTimeInputDialogShow: MutableState<Boolean> = mutableStateOf(false)
+
+//    // 이 부분 확인해보기
+//    DisposableEffect(lifecycleOwner) {
+//        val observer = LifecycleEventObserver { _, event ->
+//            if (event == Lifecycle.Event.ON_RESUME) {
+//                lifecycleScope.launch {
+//                    // 가장 최근 알람을 받아 옴
+//                    AlarmManager.alarm.collectLatest {
+//                        Log.d("dana", "알람왔다!")
+//                        isShow.value = true
+//                        toDoTitle.value = it
+//                    }
+//                }
+//            }
+//        }
+//        lifecycleOwner.lifecycle.addObserver(observer)
+//        onDispose {
+//            lifecycleOwner.lifecycle.removeObserver(observer)
+//        }
+//    }
+
+//    if (isShow.value) {
+//        toDoTitle.value?.let {
+//            AlarmDialog(
+//                toDoTitle = it,
+//                onConfirm = {isShow.value = false}
+//            )
+//        }
+//    }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -87,6 +131,15 @@ fun CreationTodoScreen(
 
         alarmUtils = AlarmUtils(context)
         alarmReceiver = AlarmReceiver()
+
+//        if (isShow.value) {
+//            toDoTitle.value?.let {
+//                AlarmDialog(
+//                    toDoTitle = it,
+//                    onConfirm = {isShow.value = false}
+//                )
+//            }
+//        }
 
         // timeInputDialog
         Box(modifier = Modifier.fillMaxSize()) {
