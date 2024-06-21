@@ -6,7 +6,7 @@ import com.dgu.smartcareapp.data.model.roomdb.DummyData
 import com.dgu.smartcareapp.data.model.roomdb.SafeWordData
 import com.dgu.smartcareapp.data.model.roomdb.TodoListData
 
-@Database(entities = [DummyData::class, SafeWordData::class, TodoListData::class], version = 3)
+@Database(entities = [DummyData::class, SafeWordData::class, TodoListData::class], version = 4)
 abstract class DummyDatabase : RoomDatabase() {
     abstract fun dummyDao(): DummyDao
     abstract fun safeWordDao(): SafeWordDao

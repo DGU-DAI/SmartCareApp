@@ -20,7 +20,8 @@ class TodoListRepositoryImpl @Inject constructor(
                     todoTitle = it.todoTitle,
                     todoHour = it.todoHour,
                     todoMinute = it.todoMinute,
-                    todoFinish = it.todoFinish
+                    todoFinish = it.todoFinish,
+                    requestCode = it.requestCode
                 )
             }
         }
