@@ -1,5 +1,6 @@
 package com.dgu.smartcareapp.presentation.main
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,6 +20,7 @@ import com.dgu.smartcareapp.presentation.safeword.navigation.safeWordNavGraph
 @Composable
 fun MainScreen(
     navigator: MainNavigator = rememberMainNavigator(),
+    context: Context,
 ) {
 
     Scaffold(
@@ -39,7 +41,10 @@ fun MainScreen(
                     )
                     todoNavGraph(
                         modifier = Modifier.padding(paddingValue),
-//                        onButtonClick = {},
+                        onButtonClick = {
+                            navigator.navController.popBackStack()
+                        },
+                        context = context,
                         onNavigationIconClick = { navigator.navController.popBackStack() }
                     )
                     myNavGraph(

@@ -1,6 +1,7 @@
 package com.dgu.smartcareapp.presentation.CreationTodo
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -37,6 +38,9 @@ import androidx.compose.ui.unit.min
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dgu.smartcareapp.R
+import com.dgu.smartcareapp.alarm.AlarmReceiver
+import com.dgu.smartcareapp.alarm.AlarmUtils
+import com.dgu.smartcareapp.domain.entity.TodoList
 import com.dgu.smartcareapp.ui.theme.SmartCareAppTheme
 import com.dgu.smartcareapp.ui.theme.mainGrey
 import com.dgu.smartcareapp.ui.theme.mainOrange
@@ -50,11 +54,19 @@ fun CreationTodoScreen(
 //    uiState: UiState,
 //    onValueChanged: (String) -> Unit = {},
 //    onConfirmToDoTime: (Int, Int) -> Unit = { _, _ -> },
-    onButtonClick: (time: String, toDoTitle: String) -> Unit = { _, _ -> },
+//    onButtonClick: (time: String, toDoTitle: String) -> Unit = { _, _ -> },
+    onButtonClick: () -> Unit,
+    context: Context,
     onNavigationIconClick: () -> Unit = {},
     viewModel: CreationViewModel = hiltViewModel(),
     todoViewModel: TodoViewModel = hiltViewModel()
 ) {
+    lateinit var alarmUtils: AlarmUtils
+    lateinit var alarmReceiver: AlarmReceiver
+
+    val isShow = mutableStateOf(false)
+    val toDoTitle: MutableState<String?> = mutableStateOf(null)
+
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val toDoTextEnabled by remember(key1 = uiState.toDoTitle) {
@@ -72,6 +84,9 @@ fun CreationTodoScreen(
             )
         }
     ) { paddingValues ->
+
+        alarmUtils = AlarmUtils(context)
+        alarmReceiver = AlarmReceiver()
 
         // timeInputDialog
         Box(modifier = Modifier.fillMaxSize()) {
@@ -138,12 +153,16 @@ fun CreationTodoScreen(
                     .align(Alignment.BottomCenter)
                     .padding(16.dp),
                 enabled = uiState.toDoTitle.isNotBlank() && uiState.selectedTimeText.isNotBlank(),
-                onButtonClick = {
-                    onButtonClick.invoke(
-                        uiState.selectedTimeText,
-                        uiState.toDoTitle
-                    )
-                }
+                todoViewModel = todoViewModel,
+                uiState = uiState,
+//                onButtonClick = {
+////                    onButtonClick.invoke(
+////                        uiState.selectedTimeText,
+////                        uiState.toDoTitle
+////                    )
+//                }
+                onButtonClick = onButtonClick,
+                alarmUtils = alarmUtils
             )
         }
     }
@@ -280,7 +299,10 @@ private fun TimeField(
 private fun CreationTodoButton(
     modifier: Modifier = Modifier,
     onButtonClick: () -> Unit = {},
-    enabled: Boolean = false
+    todoViewModel: TodoViewModel,
+    uiState: UiState,
+    enabled: Boolean = false,
+    alarmUtils: AlarmUtils
 ) {
     Button(
         modifier = modifier
@@ -291,7 +313,29 @@ private fun CreationTodoButton(
             containerColor = if (enabled) mainOrange else mainGrey,
             contentColor = Color.White
         ),
-        onClick = onButtonClick
+//        onClick = onButtonClick
+        onClick = {
+//            val (hour, minute) = time.split(":").map { it.toInt() }
+            // todo 할일 추가 (로컬에서)
+            // todo 로컬에서 추가 onSuccess 한 후에 알람 등록되는 거로 수정
+            val (hour, minute) = uiState.selectedTimeText.split(":").map { it.toInt() }
+
+            // request code의 유일성을 위해 랜덤함수를 사용 -> 차후에 리팩토링
+            val randomRequestCode = (1..100000) // 1~100000 범위에서 알람코드 랜덤으로 생성
+            val alarmCode = randomRequestCode.random()
+
+            alarmUtils.setAlarm(hour, minute, uiState.toDoTitle, alarmCode)
+
+            todoViewModel.insertTodoList(
+                TodoList(
+                    todoTitle = uiState.toDoTitle,
+                    todoHour = uiState.toDoHour ?: 0,
+                    todoMinute = uiState.toDoMinute ?: 0,
+                    todoFinish = false
+                )
+            )
+            onButtonClick()
+        }
     ) {
         Text(text = "완료")
     }
