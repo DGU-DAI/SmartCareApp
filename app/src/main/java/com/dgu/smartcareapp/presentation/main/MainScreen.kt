@@ -22,7 +22,6 @@ import com.dgu.smartcareapp.presentation.safeword.navigation.safeWordNavGraph
 fun MainScreen(
     navigator: MainNavigator = rememberMainNavigator(),
     context: Context,
-    lifeCycleScope: LifecycleCoroutineScope
 ) {
 
     Scaffold(
@@ -47,7 +46,6 @@ fun MainScreen(
                             navigator.navController.popBackStack()
                         },
                         context = context,
-                        lifecycleScope = lifeCycleScope,
                         onNavigationIconClick = { navigator.navController.popBackStack() }
                     )
                     myNavGraph(

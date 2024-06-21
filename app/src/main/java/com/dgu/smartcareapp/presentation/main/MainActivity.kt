@@ -1,6 +1,5 @@
 package com.dgu.smartcareapp.presentation.main
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -70,7 +69,7 @@ class MainActivity : ComponentActivity() {
                     toDoTitle.value?.let {
                         AlarmDialog(
                             toDoTitle = it,
-                            onConfirm = {isShow.value = false}
+                            onConfirm = { isShow.value = false }
                         )
                     }
                 }
@@ -84,7 +83,7 @@ class MainActivity : ComponentActivity() {
                             deviceWidth
                         )
                     ) {
-                        MainScreen(navigator, this, lifecycleScope)
+                        MainScreen(navigator, this)
                     }
                 }
             }

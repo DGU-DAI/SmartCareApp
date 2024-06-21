@@ -63,61 +63,21 @@ import kotlinx.coroutines.launch
 @Composable
 fun CreationTodoScreen(
     modifier: Modifier = Modifier,
-//    uiState: UiState,
-//    onValueChanged: (String) -> Unit = {},
-//    onConfirmToDoTime: (Int, Int) -> Unit = { _, _ -> },
-//    onButtonClick: (time: String, toDoTitle: String) -> Unit = { _, _ -> },
     onButtonClick: () -> Unit,
     context: Context,
-    lifecycleScope: LifecycleCoroutineScope,
     onNavigationIconClick: () -> Unit = {},
     viewModel: CreationViewModel = hiltViewModel(),
     todoViewModel: TodoViewModel = hiltViewModel()
 ) {
     lateinit var alarmUtils: AlarmUtils
-    lateinit var alarmReceiver: AlarmReceiver
-
-    // todo rememberSaveble로 수정
-    val isShow = mutableStateOf(false)
-    val toDoTitle: MutableState<String?> = mutableStateOf(null)
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val lifecycleOwner = LocalLifecycleOwner.current
 
     val toDoTextEnabled by remember(key1 = uiState.toDoTitle) {
         derivedStateOf(uiState.toDoTitle::isNotEmpty)
     }
 
     val isTimeInputDialogShow: MutableState<Boolean> = mutableStateOf(false)
-
-//    // 이 부분 확인해보기
-//    DisposableEffect(lifecycleOwner) {
-//        val observer = LifecycleEventObserver { _, event ->
-//            if (event == Lifecycle.Event.ON_RESUME) {
-//                lifecycleScope.launch {
-//                    // 가장 최근 알람을 받아 옴
-//                    AlarmManager.alarm.collectLatest {
-//                        Log.d("dana", "알람왔다!")
-//                        isShow.value = true
-//                        toDoTitle.value = it
-//                    }
-//                }
-//            }
-//        }
-//        lifecycleOwner.lifecycle.addObserver(observer)
-//        onDispose {
-//            lifecycleOwner.lifecycle.removeObserver(observer)
-//        }
-//    }
-
-//    if (isShow.value) {
-//        toDoTitle.value?.let {
-//            AlarmDialog(
-//                toDoTitle = it,
-//                onConfirm = {isShow.value = false}
-//            )
-//        }
-//    }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -130,16 +90,6 @@ fun CreationTodoScreen(
     ) { paddingValues ->
 
         alarmUtils = AlarmUtils(context)
-        alarmReceiver = AlarmReceiver()
-
-//        if (isShow.value) {
-//            toDoTitle.value?.let {
-//                AlarmDialog(
-//                    toDoTitle = it,
-//                    onConfirm = {isShow.value = false}
-//                )
-//            }
-//        }
 
         // timeInputDialog
         Box(modifier = Modifier.fillMaxSize()) {
@@ -208,12 +158,6 @@ fun CreationTodoScreen(
                 enabled = uiState.toDoTitle.isNotBlank() && uiState.selectedTimeText.isNotBlank(),
                 todoViewModel = todoViewModel,
                 uiState = uiState,
-//                onButtonClick = {
-////                    onButtonClick.invoke(
-////                        uiState.selectedTimeText,
-////                        uiState.toDoTitle
-////                    )
-//                }
                 onButtonClick = onButtonClick,
                 alarmUtils = alarmUtils
             )
@@ -368,7 +312,7 @@ private fun CreationTodoButton(
         ),
 //        onClick = onButtonClick
         onClick = {
-//            val (hour, minute) = time.split(":").map { it.toInt() }
+
             // todo 할일 추가 (로컬에서)
             // todo 로컬에서 추가 onSuccess 한 후에 알람 등록되는 거로 수정
             val (hour, minute) = uiState.selectedTimeText.split(":").map { it.toInt() }

@@ -217,8 +217,6 @@ fun FloatingActionBtn(onClickTodo: () -> Unit) {
 
     ExtendedFloatingActionButton(
         onClick = {
-//            val intent = Intent(context, CreationTodoActivity::class.java)
-//            context.startActivity(intent)
             onClickTodo()
         },
         icon = {},
