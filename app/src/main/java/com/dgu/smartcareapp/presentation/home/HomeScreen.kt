@@ -1,6 +1,7 @@
 package com.dgu.smartcareapp.presentation.home
 
 import android.annotation.SuppressLint
+import android.graphics.drawable.Icon
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -37,6 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.dgu.smartcareapp.R
@@ -47,6 +49,7 @@ import com.dgu.smartcareapp.ui.theme.mainGrey
 import com.dgu.smartcareapp.ui.theme.mainOrange
 import com.dgu.smartcareapp.ui.theme.regular16
 import com.dgu.smartcareapp.ui.theme.semiBold16
+import com.dgu.smartcareapp.ui.theme.semiBold20
 import com.dgu.smartcareapp.ui.theme.semiBold24
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -69,6 +72,7 @@ fun Home(
             Box(
                 modifier = Modifier
                     .padding(paddingValues)
+                    .background(Color.White)
                     .fillMaxSize()
             ) {
                 TodoList(todoLists)
@@ -220,8 +224,9 @@ fun FloatingActionBtn(onClickTodo: () -> Unit) {
             onClickTodo()
         },
         icon = {},
-        text = { Text(text = "일정 추가") },
+        text = { Text(text = "일정 추가", style = semiBold20(), textAlign = TextAlign.Center) },
         containerColor = mainOrange,
         contentColor = Color.White,
+        shape = RoundedCornerShape(corner = CornerSize(50.dp))
     )
 }

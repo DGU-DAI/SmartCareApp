@@ -19,7 +19,8 @@ class TodoListUseCase @Inject constructor(
                 todoTitle = todoList.todoTitle,
                 todoHour = todoList.todoHour,
                 todoMinute = todoList.todoMinute,
-                todoFinish = todoList.todoFinish
+                todoFinish = todoList.todoFinish,
+                requestCode = todoList.requestCode
             )
         )
     }
