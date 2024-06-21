@@ -33,6 +33,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.min
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dgu.smartcareapp.R
 import com.dgu.smartcareapp.ui.theme.SmartCareAppTheme
 import com.dgu.smartcareapp.ui.theme.mainGrey
@@ -44,12 +47,16 @@ import com.dgu.smartcareapp.ui.theme.semiBold16
 @Composable
 fun CreationTodoScreen(
     modifier: Modifier = Modifier,
-    uiState: UiState,
-    onValueChanged: (String) -> Unit = {},
-    onConfirmToDoTime: (Int, Int) -> Unit = { _, _ -> },
+//    uiState: UiState,
+//    onValueChanged: (String) -> Unit = {},
+//    onConfirmToDoTime: (Int, Int) -> Unit = { _, _ -> },
     onButtonClick: (time: String, toDoTitle: String) -> Unit = { _, _ -> },
     onNavigationIconClick: () -> Unit = {},
+    viewModel: CreationViewModel = hiltViewModel(),
+    todoViewModel: TodoViewModel = hiltViewModel()
 ) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     val toDoTextEnabled by remember(key1 = uiState.toDoTitle) {
         derivedStateOf(uiState.toDoTitle::isNotEmpty)
     }
@@ -76,7 +83,8 @@ fun CreationTodoScreen(
                     isTimeInputDialogShow.value = false
                 },
                 onClickConfirm = { hour, minute ->
-                    onConfirmToDoTime(hour, minute)
+//                    onConfirmToDoTime(hour, minute)
+                    viewModel.confirmTodoTime(hour, minute)
                     isTimeInputDialogShow.value = false
                 }
             )
@@ -99,7 +107,8 @@ fun CreationTodoScreen(
 
                 CreationTodoTextField(
                     text = uiState.toDoTitle,
-                    onValueChanged = onValueChanged,
+//                    onValueChanged = onValueChanged,
+                    viewModel = viewModel,
                     enabled = toDoTextEnabled
                 )
 
@@ -189,13 +198,15 @@ private fun Title(
 private fun CreationTodoTextField(
     modifier: Modifier = Modifier,
     text: String,
-    onValueChanged: (String) -> Unit,
+//    onValueChanged: (String) -> Unit,
+    viewModel: CreationViewModel,
     enabled: Boolean,
 ) {
     BasicTextField(
         value = text,
         onValueChange = {
-            onValueChanged.invoke(it)
+//            onValueChanged.invoke(it)
+            viewModel.onTodoTextValueChanged(it)
         },
         textStyle = semiBold16(),
     ) { innerTextField ->
@@ -302,14 +313,14 @@ data class UiState(
         }
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun CreationTodoScreenPreview() {
-    SmartCareAppTheme {
-        CreationTodoScreen(
-            uiState = UiState(
-                timeInputDialogUiData = TimeInputDialogUiData().copy(isShow = true)
-            )
-        )
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//private fun CreationTodoScreenPreview() {
+//    SmartCareAppTheme {
+//        CreationTodoScreen(
+//            uiState = UiState(
+//                timeInputDialogUiData = TimeInputDialogUiData().copy(isShow = true)
+//            )
+//        )
+//    }
+//}

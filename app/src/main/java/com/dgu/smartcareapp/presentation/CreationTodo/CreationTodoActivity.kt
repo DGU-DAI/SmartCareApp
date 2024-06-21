@@ -21,13 +21,16 @@ import com.dgu.smartcareapp.alarm.AlarmManager
 import com.dgu.smartcareapp.alarm.AlarmReceiver
 import com.dgu.smartcareapp.alarm.AlarmUtils
 import com.dgu.smartcareapp.component.AlarmDialog
+import com.dgu.smartcareapp.domain.entity.TodoList
 import com.dgu.smartcareapp.ui.theme.SmartCareAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class CreationTodoActivity : ComponentActivity() {
     val viewModel: CreationViewModel by viewModels()
+    val todoViewModel: TodoViewModel by viewModels()
     lateinit var alarmUtils: AlarmUtils
     lateinit var alarmReceiver: AlarmReceiver
 
@@ -79,10 +82,10 @@ class CreationTodoActivity : ComponentActivity() {
                     }
 
                     CreationTodoScreen(
-                        uiState = uiState,
-                        onValueChanged = {
-                            viewModel.onTodoTextValueChanged(it)
-                        },
+//                        uiState = uiState,
+//                        onValueChanged = {
+//                            viewModel.onTodoTextValueChanged(it)
+//                        },
                         onButtonClick = { time, toDoTitle ->
                             // todo 할일 추가 (로컬에서)
                             // todo 로컬에서 추가 onSuccess 한 후에 알람 등록되는 거로 수정
@@ -93,13 +96,23 @@ class CreationTodoActivity : ComponentActivity() {
                             val alarmCode = randomRequestCode.random()
 
                             alarmUtils.setAlarm(hour, minute, toDoTitle, alarmCode)
+
+                            todoViewModel.insertTodoList(
+                                TodoList(
+                                    todoTitle = uiState.toDoTitle,
+                                    todoHour = uiState.toDoHour ?: 0,
+                                    todoMinute = uiState.toDoMinute ?: 0,
+                                    todoFinish = false
+                                )
+                            )
+                            finish()
                         },
-                        onConfirmToDoTime = { hour, minute ->
-                            viewModel.confirmTodoTime(hour, minute)
-                        },
-                        onNavigationIconClick = {
-                            // todo 뒤로가기
-                        }
+//                        onConfirmToDoTime = { hour, minute ->
+//                            viewModel.confirmTodoTime(hour, minute)
+//                        },
+//                        onNavigationIconClick = {
+//                            finish()
+//                        }
                     )
                 }
             }
