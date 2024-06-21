@@ -88,7 +88,12 @@ class CreationTodoActivity : ComponentActivity() {
                             // todo 할일 추가 (로컬에서)
                             // todo 로컬에서 추가 onSuccess 한 후에 알람 등록되는 거로 수정
                             val (hour, minute) = time.split(":").map { it.toInt() }
-                            alarmUtils.setAlarm(hour, minute, toDoTitle)
+
+                            // request code의 유일성을 위해 랜덤함수를 사용 -> 차후에 리팩토링
+                            val randomRequestCode = (1..100000) // 1~100000 범위에서 알람코드 랜덤으로 생성
+                            val alarmCode = randomRequestCode.random()
+
+                            alarmUtils.setAlarm(hour, minute, toDoTitle, alarmCode)
                         },
                         onConfirmToDoTime = { hour, minute ->
                             viewModel.confirmTodoTime(hour, minute)

@@ -15,7 +15,7 @@ import java.util.Calendar
 class AlarmUtils(private val context: Context) {
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-    fun setAlarm(hour: Int, minute: Int, toDoTitle: String) {
+    fun setAlarm(hour: Int, minute: Int, toDoTitle: String, requestCode: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (!alarmManager.canScheduleExactAlarms()) {
                 val intent = Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
@@ -32,7 +32,7 @@ class AlarmUtils(private val context: Context) {
 
         val alarmIntent = PendingIntent.getBroadcast(
             context,
-            0,
+            requestCode,
             intent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
