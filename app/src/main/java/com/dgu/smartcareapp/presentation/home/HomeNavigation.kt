@@ -6,12 +6,14 @@ import androidx.navigation.compose.composable
 
 fun NavGraphBuilder.homeNavGraph(
     modifier: Modifier,
-    onClickMyPage: () -> Unit
+    onClickMyPage: () -> Unit,
+    onClickTodo: () -> Unit
 ) {
     composable(route = Home.Route) {
         Home(
             modifier = modifier,
-            onClickMyPage = onClickMyPage
+            onClickMyPage = onClickMyPage,
+            onClickTodo = onClickTodo
         )
     }
 }

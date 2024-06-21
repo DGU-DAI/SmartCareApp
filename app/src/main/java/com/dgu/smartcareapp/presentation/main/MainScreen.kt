@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
+import com.dgu.smartcareapp.presentation.CreationTodo.todoNavGraph
 import com.dgu.smartcareapp.presentation.home.homeNavGraph
 import com.dgu.smartcareapp.presentation.mypage.navigation.myNavGraph
 import com.dgu.smartcareapp.presentation.safeword.navigation.safeWordNavGraph
@@ -33,7 +34,13 @@ fun MainScreen(
                 ) {
                     homeNavGraph(
                         modifier = Modifier.padding(paddingValue),
-                        onClickMyPage = { navigator.navigateMyPage() }
+                        onClickMyPage = { navigator.navigateMyPage() },
+                        onClickTodo = { navigator.navigateToDo() }
+                    )
+                    todoNavGraph(
+                        modifier = Modifier.padding(paddingValue),
+//                        onButtonClick = {},
+                        onNavigationIconClick = { navigator.navController.popBackStack() }
                     )
                     myNavGraph(
                         modifier = Modifier.padding(paddingValue),

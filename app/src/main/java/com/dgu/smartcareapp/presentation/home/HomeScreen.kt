@@ -1,7 +1,6 @@
 package com.dgu.smartcareapp.presentation.home
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -43,7 +42,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.dgu.smartcareapp.R
 import com.dgu.smartcareapp.component.CustomAlertDialog
 import com.dgu.smartcareapp.domain.entity.TodoList
-import com.dgu.smartcareapp.presentation.CreationTodo.CreationTodoActivity
 import com.dgu.smartcareapp.presentation.CreationTodo.TodoViewModel
 import com.dgu.smartcareapp.ui.theme.mainGrey
 import com.dgu.smartcareapp.ui.theme.mainOrange
@@ -56,6 +54,7 @@ import com.dgu.smartcareapp.ui.theme.semiBold24
 fun Home(
     modifier: Modifier = Modifier,
     onClickMyPage: () -> Unit,
+    onClickTodo: () -> Unit,
     todoViewModel: TodoViewModel = hiltViewModel()
 ) {
 //    todoViewModel.delete()
@@ -76,7 +75,7 @@ fun Home(
             }
         },
         floatingActionButton = {
-            FloatingActionBtn()
+            FloatingActionBtn(onClickTodo)
         }
     )
 }
@@ -202,7 +201,7 @@ fun todoListLayout(
                         showDialog.value = false
                     },
                     onRightButtonClick = {
-                        Log.d("테스트","[todoList] homeScreen -> id: ${todoList[index].id}")
+                        Log.d("테스트", "[todoList] homeScreen -> id: ${todoList[index].id}")
                         todoViewModel.updateTodoList(todoList[index].id, true)
                         showDialog.value = false
                     }
@@ -213,13 +212,14 @@ fun todoListLayout(
 }
 
 @Composable
-fun FloatingActionBtn() {
+fun FloatingActionBtn(onClickTodo: () -> Unit) {
     val context = LocalContext.current
 
     ExtendedFloatingActionButton(
         onClick = {
-            val intent = Intent(context, CreationTodoActivity::class.java)
-            context.startActivity(intent)
+//            val intent = Intent(context, CreationTodoActivity::class.java)
+//            context.startActivity(intent)
+            onClickTodo()
         },
         icon = {},
         text = { Text(text = "일정 추가") },
