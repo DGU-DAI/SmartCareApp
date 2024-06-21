@@ -47,7 +47,7 @@ fun CreationTodoScreen(
     uiState: UiState,
     onValueChanged: (String) -> Unit = {},
     onConfirmToDoTime: (Int, Int) -> Unit = { _, _ -> },
-    onButtonClick: () -> Unit = {},
+    onButtonClick: (time: String, toDoTitle: String) -> Unit = { _, _ -> },
     onNavigationIconClick: () -> Unit = {},
 ) {
     val toDoTextEnabled by remember(key1 = uiState.toDoTitle) {
@@ -129,7 +129,12 @@ fun CreationTodoScreen(
                     .align(Alignment.BottomCenter)
                     .padding(16.dp),
                 enabled = uiState.toDoTitle.isNotBlank() && uiState.selectedTimeText.isNotBlank(),
-                onButtonClick = onButtonClick
+                onButtonClick = {
+                    onButtonClick.invoke(
+                        uiState.selectedTimeText,
+                        uiState.toDoTitle
+                    )
+                }
             )
         }
     }
