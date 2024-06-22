@@ -40,11 +40,5 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".presentation.CreationTodo.CreationTodoActivity"
-            android:exported="true"
-            android:theme="@style/Theme.SmartCareApp"
-            android:windowSoftInputMode="adjustPan" />
     </application>
 </manifest>

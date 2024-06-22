@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.dgu.smartcareapp.data.localdatasource.DummyDao
 import com.dgu.smartcareapp.data.localdatasource.DummyDatabase
 import com.dgu.smartcareapp.data.localdatasource.SafeWordDao
+import com.dgu.smartcareapp.data.localdatasource.TodoListDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -38,5 +39,11 @@ object DatabaseModule {
     @Singleton
     fun provideSafeWordDao(dummyDatabase: DummyDatabase): SafeWordDao {
         return dummyDatabase.safeWordDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideTodoListDao(dummyDatabase: DummyDatabase): TodoListDao {
+        return dummyDatabase.todoListDao()
     }
 }
