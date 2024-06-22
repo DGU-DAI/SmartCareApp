@@ -54,6 +54,7 @@ android {
 
 dependencies {
     implementation("androidx.security:security-crypto-ktx:1.0.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose-android:2.8.2")
     val hiltVersion = "2.51"
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.2")

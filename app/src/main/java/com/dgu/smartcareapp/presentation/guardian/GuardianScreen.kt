@@ -9,8 +9,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -141,17 +143,27 @@ fun GuardianInfo(
     }
 
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp)
+            .padding(bottom = 16.dp),
         contentAlignment = Alignment.BottomCenter
     ) {
         Button(
+            modifier = modifier
+                .fillMaxWidth()
+                .height(48.dp),
+            shape = RoundedCornerShape(8.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = if (phoneNumber.length == 11) mainOrange else mainGrey,
+                contentColor = Color.White,
+            ),
             onClick = {
                 guardianViewModel.setPhoneNumber(phoneNumber)
                 onRequestBack()
-            },
-            enabled = phoneNumber.length == 11
+            }
         ) {
-
+            Text(text = "완료")
         }
     }
 }
