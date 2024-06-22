@@ -8,6 +8,9 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -15,6 +18,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.dgu.smartcareapp.domain.entity.SmartCareStorage
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import com.dgu.smartcareapp.alarm.AlarmManager
+import com.dgu.smartcareapp.component.AlarmDialog
 import com.dgu.smartcareapp.ui.theme.SmartCareAppTheme
 import com.dgu.smartcareapp.util.VoiceRecognitionManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,6 +31,8 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 val LocalDeviceSizeComposition = staticCompositionLocalOf {
     com.dgu.smartcareapp.presentation.main.DeviceSize.MEDIUM
@@ -35,6 +46,11 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var voiceRecognitionManager: VoiceRecognitionManager
 
+
+    // todo rememberSaveble로 수정
+    val isShow = mutableStateOf(false)
+    val toDoTitle: MutableState<String?> = mutableStateOf(null)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val mainViewModel by viewModels<MainViewModel>()
@@ -43,7 +59,39 @@ class MainActivity : ComponentActivity() {
             val navigator: MainNavigator = rememberMainNavigator()
             val deviceWidth = applicationContext?.resources?.displayMetrics?.widthPixels ?: 0
 
+            val lifecycleOwner = LocalLifecycleOwner.current
+
+            // 이 부분 확인해보기
+            DisposableEffect(lifecycleOwner) {
+                val observer = LifecycleEventObserver { _, event ->
+                    if (event == Lifecycle.Event.ON_RESUME) {
+                        lifecycleScope.launch {
+                            // 가장 최근 알람을 받아 옴
+                            AlarmManager.alarm.collectLatest {
+                                Log.d("dana", "알람왔다!")
+                                isShow.value = true
+                                toDoTitle.value = it
+                            }
+                        }
+                    }
+                }
+                lifecycleOwner.lifecycle.addObserver(observer)
+                onDispose {
+                    lifecycleOwner.lifecycle.removeObserver(observer)
+                }
+            }
+
             SmartCareAppTheme {
+
+                if (isShow.value) {
+                    toDoTitle.value?.let {
+                        AlarmDialog(
+                            toDoTitle = it,
+                            onConfirm = { isShow.value = false }
+                        )
+                    }
+                }
+
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = Color.White
@@ -51,7 +99,7 @@ class MainActivity : ComponentActivity() {
                     CompositionLocalProvider(
                         LocalDeviceSizeComposition provides DeviceSize.of(deviceWidth)
                     ) {
-                        MainScreen(navigator)
+                        MainScreen(navigator, this)
                     }
                 }
             }

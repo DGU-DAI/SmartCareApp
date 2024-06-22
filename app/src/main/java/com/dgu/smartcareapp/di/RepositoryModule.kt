@@ -2,8 +2,10 @@ package com.dgu.smartcareapp.di
 
 import com.dgu.smartcareapp.data.repository.DummyRepositoryImpl
 import com.dgu.smartcareapp.data.repository.SafeWordRepositoryImpl
+import com.dgu.smartcareapp.data.repository.TodoListRepositoryImpl
 import com.dgu.smartcareapp.domain.repository.DummyRepository
 import com.dgu.smartcareapp.domain.repository.SafeWordRepository
+import com.dgu.smartcareapp.domain.repository.TodoListRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,4 +25,9 @@ object RepositoryModule {
     @Singleton
     fun providesSafeWordRepository(safeWordRepositoryImpl: SafeWordRepositoryImpl): SafeWordRepository =
         safeWordRepositoryImpl
+
+    @Provides
+    @Singleton
+    fun providesTodoListRepository(todoListRepositoryImpl: TodoListRepositoryImpl): TodoListRepository =
+        todoListRepositoryImpl
 }
