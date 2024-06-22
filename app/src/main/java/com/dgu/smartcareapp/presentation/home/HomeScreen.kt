@@ -101,7 +101,7 @@ fun TopBar(onClickMyPage: () -> Unit, modifier: Modifier) {
             TopAppBar(
                 title = {
                     Text(
-                        text = "00님 오늘도 화이팅 하세요!",
+                        text = "오늘도 화이팅 하세요!",
                         style = semiBold16()
                     )
                 },
@@ -167,8 +167,11 @@ fun todoListLayout(
                     .padding(start = 20.dp, top = 25.dp, bottom = 22.dp)
                     .align(Alignment.CenterVertically)
             ) {
+                val hour = todoList[index].todoHour
+                val minute = todoList[index].todoMinute
+
                 Text(
-                    text = "${todoList[index].todoHour}:${todoList[index].todoMinute}",
+                    text = String.format("%02d:%02d", hour, minute),
                     style = regular16(),
                     color = Color.Black
                 )
