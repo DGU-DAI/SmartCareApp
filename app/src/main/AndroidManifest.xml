@@ -12,9 +12,8 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.INTERNET" />
 
-
     <!-- alarmManager 권한 -->
-    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
 
@@ -33,10 +32,10 @@
 
         <receiver
             android:name=".alarm.AlarmReceiver"
-            android:exported="false"
-            android:enabled="true">
+            android:enabled="true"
+            android:exported="false">
             <intent-filter>
-                <action android:name="com.dgu.smartcareapp.ALARM_ACTION"/>
+                <action android:name="com.dgu.smartcareapp.ALARM_ACTION" />
             </intent-filter>
         </receiver>
 

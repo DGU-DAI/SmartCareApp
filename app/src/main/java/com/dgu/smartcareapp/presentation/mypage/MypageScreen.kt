@@ -57,7 +57,6 @@ fun MyScreen(
     val lifecycleOwner = LocalLifecycleOwner.current
     Column {
         MyPageAppBar(onRequestBack = onRequestBack, modifier = modifier)
-        Permission()
         SettingsScreen()
     }
 
@@ -199,53 +198,5 @@ fun SettingNavigationItem(
             contentDescription = "",
             tint = Color.Gray
         )
-    }
-}
-
-
-@Composable
-fun Permission() {
-    var showPermissionDialog by remember { mutableStateOf(false) }
-    val permissionsLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestMultiplePermissions()
-    ) { permissions ->
-        when {
-            permissions.values.all { it } -> {
-                // 권한이 모두 승인되었을 때의 로직
-            }
-
-            else -> {
-                // 권한 거부에 대한 처리
-                showPermissionDialog = true
-            }
-        }
-    }
-
-    Column {
-        Button(onClick = {
-            permissionsLauncher.launch(
-                arrayOf(
-                    android.Manifest.permission.SEND_SMS,
-                    android.Manifest.permission.RECEIVE_SMS,
-                    android.Manifest.permission.READ_SMS,
-                    android.Manifest.permission.RECORD_AUDIO
-                )
-            )
-        }) {
-            Text("권한 허용")
-        }
-
-        if (showPermissionDialog) {
-            AlertDialog(
-                onDismissRequest = { showPermissionDialog = false },
-                confirmButton = {
-                    Button(onClick = { showPermissionDialog = false }) {
-                        Text("확인")
-                    }
-                },
-                title = { Text("권한 요청 필요") },
-                text = { Text("보호자에게 경고 메시지를 보내기 위해 SMS 및 음성 녹음 권한이 필요합니다.") }
-            )
-        }
     }
 }
