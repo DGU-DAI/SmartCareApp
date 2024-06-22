@@ -310,7 +310,7 @@ private fun CreationTodoButton(
                     todoHour = uiState.toDoHour ?: 0,
                     todoMinute = uiState.toDoMinute ?: 0,
                     todoFinish = false,
-                    requestCode = 0
+                    requestCode = alarmCode
                 )
             ) { id ->
                 alarmUtils.setAlarm(
