@@ -12,12 +12,17 @@ import kotlinx.coroutines.launch
  * 전역적으로 해당 flow 하나만 존재하게 하기 위해서 object로 구현
  */
 object AlarmManager {
-    private val _alarm = MutableSharedFlow<String?>(1)
+    private val _alarm = MutableSharedFlow<AlarmManagerData?>(1)
     val alarm = _alarm.asSharedFlow()
 
-    fun emitAlarm(toDoTitle: String?) {
+    fun emitAlarm(toDoTitle: String?, toDoId: Int) {
         CoroutineScope(Dispatchers.Default).launch {
-            _alarm.emit(toDoTitle)
+            _alarm.emit(toDoTitle?.let { AlarmManagerData(it, toDoId) })
         }
     }
 }
+
+data class AlarmManagerData(
+    val title: String,
+    val id: Int
+)

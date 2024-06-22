@@ -21,7 +21,9 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.dgu.smartcareapp.alarm.AlarmManager
 import com.dgu.smartcareapp.component.AlarmDialog
+import com.dgu.smartcareapp.component.CustomAlertDialog
 import com.dgu.smartcareapp.domain.entity.SmartCareStorage
+import com.dgu.smartcareapp.presentation.CreationTodo.TodoViewModel
 import com.dgu.smartcareapp.ui.theme.SmartCareAppTheme
 import com.dgu.smartcareapp.util.VoiceRecognitionManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,10 +46,13 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var voiceRecognitionManager: VoiceRecognitionManager
 
+    private val todoViewModel: TodoViewModel by viewModels()
+
 
     // todo rememberSaveble로 수정
     val isShow = mutableStateOf(false)
     val toDoTitle: MutableState<String?> = mutableStateOf(null)
+    var toDoId: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,7 +73,8 @@ class MainActivity : ComponentActivity() {
                             AlarmManager.alarm.collectLatest {
                                 Log.d("dana", "알람왔다!")
                                 isShow.value = true
-                                toDoTitle.value = it
+                                toDoTitle.value = it?.title
+                                toDoId = it?.id ?: -1
                             }
                         }
                     }
@@ -80,14 +86,24 @@ class MainActivity : ComponentActivity() {
             }
 
             SmartCareAppTheme {
-
-                if (isShow.value) {
-                    toDoTitle.value?.let {
-                        AlarmDialog(
-                            toDoTitle = it,
-                            onConfirm = { isShow.value = false }
-                        )
-                    }
+                toDoTitle.value?.let {
+                    CustomAlertDialog(
+                        showDialog = isShow,
+                        title = "${it}\n을 완료하셨나요?",
+                        showTextField = false,
+                        hint = "",
+                        leftButtonText = "아니요",
+                        rightButtonText = "네",
+                        textFieldValue = "",
+                        onTextFieldValueChange = {},
+                        onLeftButtonClick = {
+                            isShow.value = false
+                        },
+                        onRightButtonClick = {
+                            todoViewModel.updateTodoList(toDoId, true)
+                            isShow.value = false
+                        }
+                    )
                 }
 
                 Surface(

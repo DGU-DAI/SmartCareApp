@@ -8,7 +8,7 @@ interface TodoListRepository {
 
     suspend fun getTodoList(): Flow<List<TodoList>>
 
-    suspend fun insertTodoList(todoListItem: TodoListData)
+    suspend fun insertTodoList(todoListItem: TodoListData): Long
 
     suspend fun updateTodoFinish(todoId: Int, todoFinish: Boolean)
 

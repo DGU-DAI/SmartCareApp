@@ -13,7 +13,7 @@ class TodoListUseCase @Inject constructor(
     suspend fun getTodoList(): Flow<List<TodoList>> =
         todoListRepository.getTodoList()
 
-    suspend fun insertTodoList(todoList: TodoList) {
+    suspend fun insertTodoList(todoList: TodoList): Long =
         todoListRepository.insertTodoList(
             TodoListData(
                 todoTitle = todoList.todoTitle,
@@ -23,7 +23,6 @@ class TodoListUseCase @Inject constructor(
                 requestCode = todoList.requestCode
             )
         )
-    }
 
     suspend fun updateTodoFinish(todoId: Int, todoFinish: Boolean) {
         todoListRepository.updateTodoFinish(todoId, todoFinish)

@@ -11,12 +11,16 @@ import android.util.Log
 class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         val toDoTitle = intent?.getStringExtra(TODO_TITLE)
+        val toDoId = intent?.getIntExtra(TODO_ID, -1)
 
-        Log.d("dana", toDoTitle.toString())
-        AlarmManager.emitAlarm(toDoTitle)
+        Log.d("dana", toDoId.toString())
+        if (toDoId != null) {
+            AlarmManager.emitAlarm(toDoTitle, toDoId)
+        }
     }
 
     companion object {
         const val TODO_TITLE = "todoTitle"
+        const val TODO_ID = "todoId"
     }
 }

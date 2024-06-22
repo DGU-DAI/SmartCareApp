@@ -13,7 +13,7 @@ interface TodoListDao {
     fun getTodoList(): Flow<List<TodoListData>>
 
     @Insert
-    suspend fun insertTodoList(todoList: TodoListData)
+    suspend fun insertTodoList(todoList: TodoListData): Long
 
     @Query("UPDATE todo_list SET todoFinish = :todoFinish WHERE id = :todoId")
     fun updateTodoFinish(todoId: Int, todoFinish: Boolean)
