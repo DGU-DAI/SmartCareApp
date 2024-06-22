@@ -33,9 +33,10 @@ class TodoViewModel @Inject constructor(
         }
     }
 
-    fun insertTodoList(todoList: TodoList) {
+    fun insertTodoList(todoList: TodoList, onSuccess: (id: Int) -> Unit) {
         viewModelScope.launch {
-            todoListUseCase.insertTodoList(todoList)
+            val id = todoListUseCase.insertTodoList(todoList)
+            onSuccess.invoke(id.toInt())
         }
     }
 

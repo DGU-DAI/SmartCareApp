@@ -15,7 +15,7 @@ import java.util.Calendar
 class AlarmUtils(private val context: Context) {
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-    fun setAlarm(hour: Int, minute: Int, toDoTitle: String, requestCode: Int) {
+    fun setAlarm(hour: Int, minute: Int, toDoTitle: String, requestCode: Int, toDoId: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (!alarmManager.canScheduleExactAlarms()) {
                 val intent = Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
@@ -28,6 +28,7 @@ class AlarmUtils(private val context: Context) {
             .apply {
                 action = "com.dgu.smartcareapp.ALARM_ACTION"
                 putExtra(TODO_TITLE, toDoTitle)
+                putExtra(TODO_ID, toDoId)
             }
 
         val alarmIntent = PendingIntent.getBroadcast(
@@ -59,5 +60,6 @@ class AlarmUtils(private val context: Context) {
 
     companion object {
         const val TODO_TITLE = "todoTitle"
+        const val TODO_ID = "todoId"
     }
 }

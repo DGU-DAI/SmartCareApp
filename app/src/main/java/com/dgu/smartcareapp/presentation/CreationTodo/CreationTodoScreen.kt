@@ -2,7 +2,6 @@ package com.dgu.smartcareapp.presentation.CreationTodo
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -22,7 +21,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
@@ -34,30 +32,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.min
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleCoroutineScope
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import com.dgu.smartcareapp.R
-import com.dgu.smartcareapp.alarm.AlarmManager
-import com.dgu.smartcareapp.alarm.AlarmReceiver
 import com.dgu.smartcareapp.alarm.AlarmUtils
-import com.dgu.smartcareapp.component.AlarmDialog
 import com.dgu.smartcareapp.domain.entity.TodoList
-import com.dgu.smartcareapp.ui.theme.SmartCareAppTheme
 import com.dgu.smartcareapp.ui.theme.mainGrey
 import com.dgu.smartcareapp.ui.theme.mainOrange
 import com.dgu.smartcareapp.ui.theme.regular14
 import com.dgu.smartcareapp.ui.theme.semiBold16
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
@@ -312,7 +296,6 @@ private fun CreationTodoButton(
         ),
 //        onClick = onButtonClick
         onClick = {
-
             // todo 할일 추가 (로컬에서)
             // todo 로컬에서 추가 onSuccess 한 후에 알람 등록되는 거로 수정
             val (hour, minute) = uiState.selectedTimeText.split(":").map { it.toInt() }
@@ -320,8 +303,6 @@ private fun CreationTodoButton(
             // request code의 유일성을 위해 랜덤함수를 사용 -> 차후에 리팩토링
             val randomRequestCode = (1..100000) // 1~100000 범위에서 알람코드 랜덤으로 생성
             val alarmCode = randomRequestCode.random()
-
-            alarmUtils.setAlarm(hour, minute, uiState.toDoTitle, alarmCode)
 
             todoViewModel.insertTodoList(
                 TodoList(
@@ -331,7 +312,16 @@ private fun CreationTodoButton(
                     todoFinish = false,
                     requestCode = 0
                 )
-            )
+            ) { id ->
+                alarmUtils.setAlarm(
+                    hour,
+                    minute,
+                    uiState.toDoTitle,
+                    alarmCode,
+                    id
+                )
+            }
+
             onButtonClick()
         }
     ) {

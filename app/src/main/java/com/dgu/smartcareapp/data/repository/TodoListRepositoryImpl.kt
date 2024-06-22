@@ -26,9 +26,8 @@ class TodoListRepositoryImpl @Inject constructor(
             }
         }
 
-    override suspend fun insertTodoList(todoListItem: TodoListData) {
+    override suspend fun insertTodoList(todoListItem: TodoListData): Long =
         todoListDao.insertTodoList(todoListItem)
-    }
 
     override suspend fun updateTodoFinish(todoId: Int, todoFinish: Boolean) {
         todoListDao.updateTodoFinish(todoId, todoFinish)
