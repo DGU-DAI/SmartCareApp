@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.compose.NavHost
+import com.dgu.smartcareapp.presentation.guardian.navigation.guardianNavGraph
 import com.dgu.smartcareapp.presentation.CreationTodo.todoNavGraph
 import com.dgu.smartcareapp.presentation.home.homeNavGraph
 import com.dgu.smartcareapp.presentation.mypage.navigation.myNavGraph
@@ -51,10 +52,14 @@ fun MainScreen(
                     myNavGraph(
                         modifier = Modifier.padding(paddingValue),
                         onSafeWordClick = { navigator.navigateSafeWord() },
-                        onGuardianInfoClick = {},
+                        onGuardianInfoClick = { navigator.navigateGuardian() },
                         onRequestBack = { navigator.navController.popBackStack() }
                     )
                     safeWordNavGraph(
+                        modifier = Modifier.padding(paddingValue),
+                        onRequestBack = { navigator.navController.popBackStack() }
+                    )
+                    guardianNavGraph(
                         modifier = Modifier.padding(paddingValue),
                         onRequestBack = { navigator.navController.popBackStack() }
                     )

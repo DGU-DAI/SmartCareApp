@@ -36,5 +36,4 @@ class SafeWordViewModel @Inject constructor(
             getAllSafeWords()
         }
     }
-
 }

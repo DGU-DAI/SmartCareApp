@@ -1,5 +1,8 @@
 package com.dgu.smartcareapp.presentation.mypage
 
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,8 +12,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Divider
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Switch
@@ -95,7 +100,7 @@ fun MyPageAppBar(onRequestBack: () -> Unit, modifier: Modifier) {
                     }
                 },
                 title = {},
-                colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.White)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
             )
             Row(
                 modifier = modifier.fillMaxWidth(),
@@ -108,7 +113,7 @@ fun MyPageAppBar(onRequestBack: () -> Unit, modifier: Modifier) {
                 )
             }
         }
-        Divider(thickness = 2.dp)
+        HorizontalDivider(thickness = 2.dp)
     }
 }
 
@@ -120,21 +125,21 @@ fun SettingsScreen() {
             .padding(horizontal = 16.dp)
     ) {
         SettingSwitchItem(title = "세이프 워드 기능")
-        Divider()
+        HorizontalDivider()
         SettingNavigationItem(
             title = "세이프 워드 설정",
         )
-        Divider()
+        HorizontalDivider()
         SettingNavigationItem(
             title = "보호자 정보 수정",
         )
-        Divider()
+        HorizontalDivider()
     }
 }
 
 @Composable
-fun SettingSwitchItem(title: String) {
-    var isChecked by remember { mutableStateOf(false) }
+fun SettingSwitchItem(title: String, myPageViewModel: MyViewModel = hiltViewModel()) {
+    var isChecked by remember { mutableStateOf(myPageViewModel.isChecked.value) }
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -148,7 +153,12 @@ fun SettingSwitchItem(title: String) {
         Switch(
             modifier = Modifier.scale(0.8f),
             checked = isChecked,
-            onCheckedChange = { isChecked = it },
+            onCheckedChange = {
+                isChecked = it
+                myPageViewModel.setIsChecked(it)
+                myPageViewModel.getIsChecked()
+                Log.d("aaa", "${myPageViewModel.isChecked.value}")
+            },
             colors = SwitchDefaults.colors(
                 checkedThumbColor = mainOrange,
                 uncheckedThumbColor = Color.Black,
@@ -190,5 +200,3 @@ fun SettingNavigationItem(
         )
     }
 }
-
-
